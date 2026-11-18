@@ -491,6 +491,41 @@
       border: 1px solid var(--border-subtle);
       overflow-y: auto;
       max-height: 820px;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .timeline-scroll-wrap.drop-target-active {
+      border-color: rgba(129, 140, 248, 0.78);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.28), inset 0 0 28px rgba(99, 102, 241, 0.12);
+    }
+
+    .template-drag-chip {
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .template-drag-chip:active {
+      cursor: grabbing;
+    }
+
+    .tpl-drop-ghost {
+      position: absolute;
+      left: 66px;
+      right: 12px;
+      border-radius: 10px;
+      border: 2px dashed #818cf8;
+      background: rgba(99, 102, 241, 0.22);
+      color: #e0e7ff;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: 30;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
     }
 
     .timeline-canvas {
@@ -545,7 +580,7 @@
       left: 66px;
       right: 12px;
       border-radius: 10px;
-      padding: 4px 10px 8px;
+      padding: 8px 10px 8px;
       border: 1px solid rgba(255, 255, 255, 0.18);
       backdrop-filter: blur(10px);
       cursor: grab;
@@ -577,13 +612,12 @@
       opacity: 0.58;
     }
 
-    /* Bottom Resize Handle */
+    /* Top & Bottom Resize Handles */
     .resize-handle {
       position: absolute;
       left: 0;
       right: 0;
-      bottom: 0;
-      height: 12px;
+      height: 11px;
       cursor: ns-resize;
       display: flex;
       align-items: center;
@@ -591,18 +625,26 @@
       z-index: 15;
     }
 
+    .resize-handle-top {
+      top: 0;
+    }
+
+    .resize-handle-bottom {
+      bottom: 0;
+    }
+
     .resize-handle::after {
       content: "";
       width: 34px;
       height: 3px;
       border-radius: 99px;
-      background: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.25);
       transition: background 0.15s ease, width 0.15s ease;
     }
 
     .time-block:hover .resize-handle::after,
     .resize-handle:hover::after {
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       width: 48px;
     }
 
@@ -963,6 +1005,139 @@
       padding: 11px 15px;
       border-radius: 12px;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      pointer-events: auto;
+    }
+
+    /* =========================================================================
+       11. MOBILE RESPONSIVE OPTIMIZATIONS (< 680px)
+       ========================================================================= */
+    @media (max-width: 680px) {
+      .app-shell {
+        padding: 10px 10px 28px;
+        gap: 12px;
+      }
+
+      .top-header {
+        position: static;
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .brand-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+      }
+
+      .brand-title {
+        font-size: 1rem;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+
+      .header-controls {
+        width: 100%;
+        justify-content: space-between;
+        gap: 7px;
+      }
+
+      .date-nav-group {
+        width: 100%;
+        justify-content: space-between;
+        padding: 5px 6px;
+      }
+
+      .date-label-wrap {
+        padding: 0 2px;
+        min-width: 0;
+        flex: 1;
+        justify-content: center;
+      }
+
+      .date-text {
+        font-size: 0.76rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      #date-picker-input {
+        width: 34px !important;
+        padding: 4px !important;
+      }
+
+      .view-switcher {
+        flex: 1;
+      }
+
+      .view-btn {
+        flex: 1;
+        padding: 7px 6px;
+        font-size: 0.74rem;
+      }
+
+      .kpi-card {
+        padding: 12px;
+      }
+
+      .kpi-val {
+        font-size: 1.12rem;
+      }
+
+      .panel-box {
+        padding: 13px;
+        gap: 11px;
+      }
+
+      .hour-label {
+        left: 6px;
+        font-size: 0.66rem;
+      }
+
+      .now-line {
+        left: 46px;
+        right: 6px;
+      }
+
+      .time-block {
+        left: 50px;
+        right: 6px;
+        padding: 7px 8px;
+      }
+
+      .block-title {
+        font-size: 0.77rem;
+      }
+
+      .block-time-pill {
+        font-size: 0.65rem;
+        padding: 2px 5px;
+      }
+
+      .prio-tag {
+        display: none;
+      }
+
+      .form-grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .month-cell {
+        min-height: 64px;
+        padding: 4px;
+      }
+
+      .month-event-pill {
+        font-size: 0.58rem;
+        padding: 1px 3px;
+      }
+
+      .toast-stack {
+        left: 10px;
+        right: 10px;
+        bottom: 12px;
+      }
     }
   </style>
 </head>
@@ -1007,7 +1182,8 @@
         </div>
 
         <!-- Quick Utility Actions -->
-        <button type="button" class="btn btn-cyan btn-sm" onclick="openCopyModal()">⎘ Tag kopieren</button>
+        <button type="button" id="undo-action-btn" class="btn btn-sm" onclick="undoLastAction()" disabled style="opacity:0.45;" title="Letzten Schritt rückgängig machen">↶ Rückgängig</button>
+        <button type="button" class="btn btn-cyan btn-sm" onclick="openCopyModal()">⎘ Kopieren</button>
         <button type="button" class="btn btn-sm" onclick="openBackupModal()">Backup</button>
       </div>
     </header>
@@ -1076,7 +1252,7 @@
         <div class="panel-header">
           <div>
             <h2 class="panel-title">Schnell-Vorlagen & Bausteine</h2>
-            <p class="panel-subtitle">Mit 1 Klick direkt in die Tages-Zeitleiste einfügen</p>
+            <p class="panel-subtitle">Ziehe einen Baustein direkt in die Zeitleiste oder füge ihn per Klick ein</p>
           </div>
           <button type="button" class="btn btn-sm" onclick="openBlockModal(null, 'templates')">Vorlagen & Kat.</button>
         </div>
@@ -1097,7 +1273,8 @@
             <p class="panel-subtitle">Klicke auf einen Block zum Bearbeiten, ziehe ihn zum Verschieben oder ziehe am unteren Rand zum Verlängern (Doppelklick auf freie Zeit = neuer Termin)</p>
           </div>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <button type="button" class="btn btn-sm" onclick="loadSampleDay()">Beispieltag</button>
+            <button type="button" class="btn btn-sm" onclick="loadSampleDay()" title="Deinen gespeicherten Beispieltag einfügen">Beispieltag</button>
+            <button type="button" class="btn btn-sm" onclick="saveCurrentDayAsSample()" title="Aktuellen Tag als neuen Beispieltag speichern">★ Als Beispiel</button>
             <button type="button" class="btn btn-danger btn-sm" onclick="clearCurrentDay()">Tag leeren</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="openBlockModal()">+ Aktivität</button>
           </div>
@@ -1220,9 +1397,21 @@
 
       <!-- TAB 2: Templates & Custom Categories -->
       <div id="ed-panel-templates" class="hidden" style="display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; flex-direction:column; gap:8px; padding-bottom:10px; border-bottom:1px solid var(--border-subtle);">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:0.78rem; font-weight:800; color:#fff;">Mein Beispieltag (Standard-Ablauf)</span>
+            <div style="display:flex; gap:5px;">
+              <button type="button" class="btn btn-emerald btn-sm" onclick="saveCurrentDayAsSample()">Aktuellen Tag übernehmen</button>
+              <button type="button" class="mini-btn" onclick="resetSampleDayToDefault()" title="Auf Werkseinstellung zurücksetzen">Reset</button>
+            </div>
+          </div>
+          <p style="font-size:0.71rem; color:var(--text-muted);">Diese Aktivitäten & Ziele werden beim Klick auf „Beispieltag“ geladen:</p>
+          <div id="sample-day-editor-list" style="display:flex; flex-direction:column; gap:5px; max-height:140px; overflow-y:auto;"></div>
+        </div>
+
         <div style="display:flex; flex-direction:column; gap:8px;">
           <span style="font-size:0.78rem; font-weight:800; color:#fff;">1-Klick-Vorlagen (Studium, Arbeit & Sport)</span>
-          <div id="templates-list" style="display:flex; flex-direction:column; gap:7px; max-height:210px; overflow-y:auto;"></div>
+          <div id="templates-list" style="display:flex; flex-direction:column; gap:7px; max-height:175px; overflow-y:auto;"></div>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:8px; padding-top:10px; border-top:1px solid var(--border-subtle);">
@@ -1355,6 +1544,21 @@
       { id: 'tpl-5', title: 'Training: Laufen / Cardio', start: '07:15', duration: 45, categoryId: 'cat-training', priority: 'normal', notes: 'Lockerer Dauerlauf oder Intervalle' }
     ];
 
+    const DEFAULT_SAMPLE_DAY = {
+      blocks: [
+        { title: 'Arbeit: Sprint & Aufgaben', start: '08:30', duration: 210, categoryId: 'cat-work', priority: 'hoch', notes: 'Wichtigste Projekt-Tasks vormittags erledigen' },
+        { title: 'Mittagspause & Energie tanken', start: '12:00', duration: 60, categoryId: 'cat-routine', priority: 'normal', notes: 'Mahlzeit & kurzer Spaziergang' },
+        { title: 'Studium: Vorlesung & Übungszettel', start: '13:30', duration: 150, categoryId: 'cat-study', priority: 'hoch', notes: 'Modul-Zusammenfassung schreiben & Aufgaben lösen' },
+        { title: 'Training: Oberkörper / Kraft', start: '17:30', duration: 75, categoryId: 'cat-training', priority: 'normal', notes: 'Bankdrücken, Rudern, Schultern + Core' },
+        { title: 'Abendessen & Regeneration', start: '19:30', duration: 90, categoryId: 'cat-private', priority: 'normal', notes: 'Kochen, Tagesrückblick & Abschalten' }
+      ],
+      goals: [
+        'Wichtigste Arbeitsaufgabe bis 12:00 abschließen',
+        '2,5 Std. konzentriert für die Uni lernen',
+        'Training erfolgreich durchziehen'
+      ]
+    };
+
     let state = {
       selectedDate: getTodayISO(),
       monthCursor: getTodayISO().slice(0, 7),
@@ -1363,6 +1567,7 @@
       editorTab: 'form',
       categories: [...DEFAULT_CATEGORIES],
       templates: [...DEFAULT_TEMPLATES],
+      sampleDay: JSON.parse(JSON.stringify(DEFAULT_SAMPLE_DAY)),
       days: {}
     };
 
@@ -1370,6 +1575,54 @@
       selectedBlockIds: [],
       targetDate: ''
     };
+
+    const undoHistory = [];
+    const MAX_UNDO_STEPS = 25;
+
+    function pushUndoSnapshot(actionLabel = 'Änderung') {
+      undoHistory.push({
+        label: actionLabel,
+        snapshot: JSON.stringify({
+          categories: state.categories,
+          templates: state.templates,
+          days: state.days
+        })
+      });
+      if (undoHistory.length > MAX_UNDO_STEPS) {
+        undoHistory.shift();
+      }
+      updateUndoButtonUI();
+    }
+
+    function updateUndoButtonUI() {
+      const btn = document.getElementById('undo-action-btn');
+      if (!btn) return;
+      const hasSteps = undoHistory.length > 0;
+      btn.disabled = !hasSteps;
+      btn.style.opacity = hasSteps ? '1' : '0.45';
+      btn.textContent = hasSteps ? `↶ Rückgängig (${undoHistory.length})` : '↶ Rückgängig';
+    }
+
+    function undoLastAction() {
+      if (!undoHistory.length) {
+        showToast('Nichts zum Rückgängigmachen vorhanden', 'info');
+        return;
+      }
+      const lastEntry = undoHistory.pop();
+      try {
+        const restored = JSON.parse(lastEntry.snapshot);
+        state.categories = restored.categories || [...DEFAULT_CATEGORIES];
+        state.templates = restored.templates || [...DEFAULT_TEMPLATES];
+        state.days = restored.days || {};
+        ensureDay(state.selectedDate);
+        updateUndoButtonUI();
+        saveState();
+        renderAll();
+        showToast(`Rückgängig: ${lastEntry.label}`, 'success');
+      } catch (e) {
+        console.error('Undo restore error:', e);
+      }
+    }
 
     // =========================================================================
     // 2. INITIALIZATION, FIREBASE SYNC & STORAGE PERSISTENCE
@@ -1418,6 +1671,9 @@
                 };
                 if (!state.categories || !state.categories.length) state.categories = [...DEFAULT_CATEGORIES];
                 if (!state.templates) state.templates = [...DEFAULT_TEMPLATES];
+                if (!state.sampleDay || !Array.isArray(state.sampleDay.blocks)) {
+                  state.sampleDay = JSON.parse(JSON.stringify(DEFAULT_SAMPLE_DAY));
+                }
                 ensureDay(state.selectedDate);
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
                 renderAll();
@@ -1454,6 +1710,7 @@
           const syncPayload = {
             categories: state.categories,
             templates: state.templates,
+            sampleDay: state.sampleDay,
             days: state.days
           };
           await setDoc(docRef, {
@@ -1484,6 +1741,9 @@
           };
           if (!state.categories || !state.categories.length) state.categories = [...DEFAULT_CATEGORIES];
           if (!state.templates) state.templates = [...DEFAULT_TEMPLATES];
+          if (!state.sampleDay || !Array.isArray(state.sampleDay.blocks)) {
+            state.sampleDay = JSON.parse(JSON.stringify(DEFAULT_SAMPLE_DAY));
+          }
         } else {
           populateSampleDay(state.selectedDate, true);
           saveState();
@@ -1595,20 +1855,23 @@
         .replace(/"/g, '&quot;');
     }
 
-    function showToast(msg, type = 'info') {
+    function showToast(msg, type = 'info', allowUndo = false) {
       const stack = document.getElementById('toast-stack');
       if (!stack) return;
       const toast = document.createElement('div');
       toast.className = 'toast';
       const dotColor = type === 'success' ? '#10b981' : type === 'error' ? '#f43f5e' : '#818cf8';
-      toast.innerHTML = `<span style="width:9px; height:9px; border-radius:99px; background:${dotColor}; flex-shrink:0;"></span><span>${escapeHTML(msg)}</span>`;
+      const undoHtml = (allowUndo && undoHistory.length > 0)
+        ? `<button type="button" class="mini-btn" style="margin-left:auto; background:rgba(99,102,241,0.28); color:#c7d2fe; border-color:rgba(129,140,248,0.45);" onclick="undoLastAction(); this.closest('.toast').remove();">↶ Rückgängig</button>`
+        : '';
+      toast.innerHTML = `<span style="width:9px; height:9px; border-radius:99px; background:${dotColor}; flex-shrink:0;"></span><span>${escapeHTML(msg)}</span>${undoHtml}`;
       stack.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
         toast.style.transform = 'translateY(8px)';
         toast.style.transition = 'all 0.25s ease';
         setTimeout(() => toast.remove(), 260);
-      }, 2800);
+      }, allowUndo ? 4200 : 2800);
     }
 
     // =========================================================================
@@ -1683,6 +1946,7 @@
       const input = document.getElementById('new-goal-input');
       const text = (input.value || '').trim();
       if (!text) return;
+      pushUndoSnapshot('Tagesziel hinzugefügt');
       const dayData = ensureDay(state.selectedDate);
       dayData.goals.push({
         id: 'goal-' + Date.now(),
@@ -1692,13 +1956,14 @@
       input.value = '';
       saveState();
       renderGoalsAndTemplates();
-      showToast('Tagesziel hinzugefügt', 'success');
+      showToast('Tagesziel hinzugefügt', 'success', true);
     }
 
     function toggleGoal(goalId) {
       const dayData = ensureDay(state.selectedDate);
       const goal = dayData.goals.find(g => g.id === goalId);
       if (goal) {
+        pushUndoSnapshot('Tagesziel umgeschaltet');
         goal.done = !goal.done;
         saveState();
         renderGoalsAndTemplates();
@@ -1707,37 +1972,90 @@
 
     function deleteGoal(goalId) {
       const dayData = ensureDay(state.selectedDate);
+      pushUndoSnapshot('Tagesziel gelöscht');
       dayData.goals = dayData.goals.filter(g => g.id !== goalId);
       saveState();
       renderGoalsAndTemplates();
+      showToast('Tagesziel gelöscht', 'info', true);
     }
 
     // =========================================================================
     // 6. TIME BLOCKS, SAMPLE DAY & INTEGRATED PLANNER MODAL ACTIONS
     // =========================================================================
     function populateSampleDay(dateStr, silent = false) {
+      if (!silent) pushUndoSnapshot('Beispieltag geladen');
       const dayData = ensureDay(dateStr);
-      dayData.blocks = [
-        { id: 'blk-1', title: 'Arbeit: Sprint & Aufgaben', start: '08:30', duration: 210, categoryId: 'cat-work', priority: 'hoch', notes: 'Wichtigste Projekt-Tasks vormittags erledigen', completed: false },
-        { id: 'blk-2', title: 'Mittagspause & Energie tanken', start: '12:00', duration: 60, categoryId: 'cat-routine', priority: 'normal', notes: 'Mahlzeit & kurzer Spaziergang', completed: false },
-        { id: 'blk-3', title: 'Studium: Vorlesung & Übungszettel', start: '13:30', duration: 150, categoryId: 'cat-study', priority: 'hoch', notes: 'Modul-Zusammenfassung schreiben & Aufgaben lösen', completed: false },
-        { id: 'blk-4', title: 'Training: Oberkörper / Kraft', start: '17:30', duration: 75, categoryId: 'cat-training', priority: 'normal', notes: 'Bankdrücken, Rudern, Schultern + Core', completed: false },
-        { id: 'blk-5', title: 'Abendessen & Regeneration', start: '19:30', duration: 90, categoryId: 'cat-private', priority: 'normal', notes: 'Kochen, Tagesrückblick & Abschalten', completed: false }
-      ];
-      dayData.goals = [
-        { id: 'g-1', text: 'Wichtigste Arbeitsaufgabe bis 12:00 abschließen', done: false },
-        { id: 'g-2', text: '2,5 Std. konzentriert für die Uni lernen', done: false },
-        { id: 'g-3', text: 'Training erfolgreich durchziehen', done: false }
-      ];
+      const customSample = (state.sampleDay && Array.isArray(state.sampleDay.blocks))
+        ? state.sampleDay
+        : DEFAULT_SAMPLE_DAY;
+
+      dayData.blocks = customSample.blocks.map((b, idx) => ({
+        id: `blk-${Date.now()}-${idx}-${Math.floor(Math.random() * 1000)}`,
+        title: b.title,
+        start: b.start,
+        duration: Number(b.duration) || 60,
+        categoryId: b.categoryId || state.categories[0]?.id || 'cat-work',
+        priority: b.priority || 'normal',
+        notes: b.notes || '',
+        completed: false
+      }));
+
+      dayData.goals = (customSample.goals || []).map((gText, idx) => ({
+        id: `g-${Date.now()}-${idx}`,
+        text: typeof gText === 'string' ? gText : (gText.text || ''),
+        done: false
+      }));
+
       if (!silent) {
         saveState();
         renderAll();
-        showToast('Beispieltag für Arbeit, Studium & Training geladen', 'success');
+        showToast('Dein Beispieltag wurde geladen', 'success', true);
       }
     }
 
     function loadSampleDay() {
       populateSampleDay(state.selectedDate, false);
+    }
+
+    function saveCurrentDayAsSample() {
+      const dayData = ensureDay(state.selectedDate);
+      if (!dayData.blocks.length && !dayData.goals.length) {
+        showToast('Der aktuelle Tag ist leer – bitte zuerst Aktivitäten anlegen', 'error');
+        return;
+      }
+      pushUndoSnapshot('Beispieltag aktualisiert');
+      const sorted = [...dayData.blocks].sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
+      state.sampleDay = {
+        blocks: sorted.map(b => ({
+          title: b.title,
+          start: b.start,
+          duration: Number(b.duration) || 60,
+          categoryId: b.categoryId,
+          priority: b.priority || 'normal',
+          notes: b.notes || ''
+        })),
+        goals: dayData.goals.map(g => g.text)
+      };
+      saveState();
+      renderEditor();
+      showToast(`Aktueller Tag (${sorted.length} Blöcke) als neuer Beispieltag gespeichert!`, 'success', true);
+    }
+
+    function removeBlockFromSample(idx) {
+      if (!state.sampleDay || !Array.isArray(state.sampleDay.blocks)) return;
+      pushUndoSnapshot('Block aus Beispieltag entfernt');
+      state.sampleDay.blocks.splice(idx, 1);
+      saveState();
+      renderEditor();
+      showToast('Aus Beispieltag entfernt', 'info', true);
+    }
+
+    function resetSampleDayToDefault() {
+      pushUndoSnapshot('Beispieltag zurückgesetzt');
+      state.sampleDay = JSON.parse(JSON.stringify(DEFAULT_SAMPLE_DAY));
+      saveState();
+      renderEditor();
+      showToast('Beispieltag auf Standard zurückgesetzt', 'info', true);
     }
 
     function openBlockModal(defaultStart = null, initialTab = 'form') {
@@ -1786,10 +2104,12 @@
       if (editId) {
         const idx = dayData.blocks.findIndex(b => b.id === editId);
         if (idx !== -1) {
+          pushUndoSnapshot(`„${title}“ bearbeitet`);
           dayData.blocks[idx] = { ...dayData.blocks[idx], title, categoryId, start, duration, priority, notes };
-          showToast('Aktivität aktualisiert', 'success');
+          showToast('Aktivität aktualisiert', 'success', true);
         }
       } else {
+        pushUndoSnapshot(`„${title}“ hinzugefügt`);
         dayData.blocks.push({
           id: 'blk-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
           title,
@@ -1800,7 +2120,7 @@
           notes,
           completed: false
         });
-        showToast('Aktivität hinzugefügt', 'success');
+        showToast('Aktivität hinzugefügt', 'success', true);
       }
 
       closeBlockModal();
@@ -1883,6 +2203,7 @@
       const dayData = ensureDay(state.selectedDate);
       const block = dayData.blocks.find(b => b.id === blockId);
       if (block) {
+        pushUndoSnapshot(`Status „${block.title}“ geändert`);
         block.completed = !block.completed;
         saveState();
         renderAll();
@@ -1893,6 +2214,7 @@
       const dayData = ensureDay(state.selectedDate);
       const block = dayData.blocks.find(b => b.id === blockId);
       if (!block) return;
+      pushUndoSnapshot(`„${block.title}“ verschoben`);
       const maxStart = Math.max(0, 24 * 60 - (Number(block.duration) || 60));
       const newMin = Math.max(0, Math.min(maxStart, timeToMinutes(block.start) + deltaMinutes));
       block.start = minutesToTime(newMin);
@@ -1902,22 +2224,26 @@
 
     function deleteBlock(blockId) {
       const dayData = ensureDay(state.selectedDate);
+      const target = dayData.blocks.find(b => b.id === blockId);
+      pushUndoSnapshot(target ? `„${target.title}“ gelöscht` : 'Aktivität gelöscht');
       dayData.blocks = dayData.blocks.filter(b => b.id !== blockId);
       if (document.getElementById('edit-block-id').value === blockId) {
         resetBlockForm();
       }
       saveState();
       renderAll();
-      showToast('Aktivität entfernt', 'info');
+      showToast('Aktivität entfernt', 'info', true);
     }
 
     function clearCurrentDay() {
       const dayData = ensureDay(state.selectedDate);
+      if (!dayData.blocks.length) return;
+      pushUndoSnapshot('Tagesplan geleert');
       dayData.blocks = [];
       resetBlockForm();
       saveState();
       renderAll();
-      showToast('Tagesplan geleert', 'info');
+      showToast('Tagesplan geleert', 'info', true);
     }
 
     // =========================================================================
@@ -1926,6 +2252,7 @@
     function applyTemplate(tplId) {
       const tpl = state.templates.find(t => t.id === tplId);
       if (!tpl) return;
+      pushUndoSnapshot(`Vorlage „${tpl.title}“ eingefügt`);
       const dayData = ensureDay(state.selectedDate);
       dayData.blocks.push({
         id: 'blk-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
@@ -1939,7 +2266,7 @@
       });
       saveState();
       renderAll();
-      showToast(`Vorlage „${tpl.title}“ eingefügt`, 'success');
+      showToast(`Vorlage „${tpl.title}“ eingefügt`, 'success', true);
     }
 
     function saveFormAsTemplate() {
@@ -2042,12 +2369,13 @@
         });
       });
 
+      pushUndoSnapshot('Text-Planer übernommen');
       const dayData = ensureDay(state.selectedDate);
       dayData.blocks = newBlocks;
       closeBlockModal();
       saveState();
       renderAll();
-      showToast(`${newBlocks.length} Aktivitäten aus Text übernommen`, 'success');
+      showToast(`${newBlocks.length} Aktivitäten aus Text übernommen`, 'success', true);
     }
 
     // =========================================================================
@@ -2137,6 +2465,8 @@
         targetDates.push(addDaysISO(targetDate, 21));
       }
 
+      pushUndoSnapshot(`${blocksToCopy.length} Aktivitäten kopiert`);
+
       targetDates.forEach((dtStr, dIdx) => {
         const destDay = ensureDay(dtStr);
         blocksToCopy.forEach((orig, bIdx) => {
@@ -2154,7 +2484,7 @@
       const label = repeat4Weeks
         ? `${blocksToCopy.length} Aktivitäten auf 4 Wochen kopiert`
         : `${blocksToCopy.length} Aktivitäten nach ${formatDateGerman(targetDate)} kopiert`;
-      showToast(label, 'success');
+      showToast(label, 'success', true);
     }
 
     // =========================================================================
@@ -2320,8 +2650,7 @@
           </div>
         `).join('');
       }
-
-      // Quick 1-Click Templates Bar
+      // Quick 1-Click Templates Bar (Draggable into Timeline + 1-Click)
       const quickBar = document.getElementById('quick-templates-bar');
       if (quickBar) {
         if (!state.templates.length) {
@@ -2330,13 +2659,14 @@
           quickBar.innerHTML = state.templates.map(tpl => {
             const cat = getCategory(tpl.categoryId);
             return `
-              <button type="button" class="btn btn-sm" onclick="applyTemplate('${tpl.id}')" style="background:${hexToRgba(cat.color, 0.14)}; border-color:${hexToRgba(cat.color, 0.38)}; color:#f8fafc;">
+              <button type="button" class="btn btn-sm template-drag-chip" data-tpl-id="${tpl.id}" style="background:${hexToRgba(cat.color, 0.14)}; border-color:${hexToRgba(cat.color, 0.38)}; color:#f8fafc;" title="In die Zeitleiste ziehen oder klicken">
                 <span style="width:8px; height:8px; border-radius:99px; background:${cat.color};"></span>
                 <span>+ ${escapeHTML(tpl.title)}</span>
                 <span style="font-size:0.68rem; color:var(--text-muted);">(${tpl.duration}m)</span>
               </button>
             `;
           }).join('');
+          attachTemplateDragAndDrop(quickBar);
         }
       }
     }
@@ -2370,142 +2700,145 @@
         const nowMin = now.getHours() * 60 + now.getMinutes();
         if (nowMin >= START_HOUR * 60 && nowMin <= END_HOUR * 60) {
           const nowTop = (nowMin - START_HOUR * 60) * PX_PER_MIN;
-          html += `
-            <div class="now-line" style="top:${nowTop}px;">
-              <span class="now-dot"></span>
-            </div>
-          `;
+          html += `<div class="now-line" style="top:${nowTop}px;"><span class="now-dot"></span></div>`;
         }
       }
 
       const dayData = ensureDay(state.selectedDate);
-      const sorted = [...dayData.blocks].sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
+      const sortedBlocks = [...dayData.blocks].sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
 
-      sorted.forEach(b => {
+      sortedBlocks.forEach(b => {
         const cat = getCategory(b.categoryId);
-        const startMin = Math.max(START_HOUR * 60, timeToMinutes(b.start));
+        const startMin = timeToMinutes(b.start);
         const durMin = Math.max(15, Number(b.duration) || 60);
-        const topPx = (startMin - START_HOUR * 60) * PX_PER_MIN;
+        const topPx = Math.max(0, (startMin - START_HOUR * 60) * PX_PER_MIN);
         const heightPx = Math.max(24, durMin * PX_PER_MIN - 2);
-        const endTimeStr = getEndTime(b.start, durMin);
-
-        const bgGradient = `linear-gradient(135deg, ${hexToRgba(cat.color, 0.34)}, ${hexToRgba(cat.color, 0.16)})`;
-        const borderCol = hexToRgba(cat.color, 0.58);
+        const endStr = getEndTime(b.start, durMin);
+        const isCompact = durMin <= 45;
 
         html += `
-          <div class="time-block ${b.completed ? 'completed' : ''}" data-block-id="${b.id}" style="top:${topPx}px; height:${heightPx}px; background:${bgGradient}; border-color:${borderCol};">
+          <div class="time-block ${b.completed ? 'completed' : ''}"
+               data-block-id="${b.id}"
+               style="top:${topPx}px; height:${heightPx}px; background:linear-gradient(135deg, ${hexToRgba(cat.color, 0.34)}, ${hexToRgba(cat.color, 0.16)}); border-left:4px solid ${cat.color};">
+            <div class="resize-handle resize-handle-top" data-resize-dir="top" title="Nach oben ziehen zum Verlängern/Verkürzen"></div>
             <div class="block-top-row">
               <div class="block-left">
-                <span class="check-box ${b.completed ? 'checked' : ''}" onclick="event.stopPropagation(); toggleBlockComplete('${b.id}')">
+                <span class="check-box ${b.completed ? 'checked' : ''}" onclick="event.stopPropagation(); toggleBlockComplete('${b.id}')" title="Als erledigt abhaken">
                   ${b.completed ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
                 </span>
                 <span class="block-title ${b.completed ? 'text-done' : ''}">${escapeHTML(b.title)}</span>
                 ${b.priority === 'hoch' ? '<span class="prio-tag">Fokus</span>' : ''}
               </div>
               <div class="block-actions">
-                <span class="block-time-pill">${b.start} – ${endTimeStr}</span>
-                <button type="button" class="block-mini-btn" onclick="event.stopPropagation(); openCopyModal('${b.id}')" title="Aktivität kopieren">⎘</button>
-                <button type="button" class="block-mini-btn" onclick="event.stopPropagation(); deleteBlock('${b.id}')" title="Löschen">✕</button>
+                <span class="block-time-pill">${b.start} – ${endStr}</span>
+                <button type="button" class="block-mini-btn" onclick="event.stopPropagation(); openCopyModal('${b.id}')" title="Auf andere Tage kopieren">⎘</button>
               </div>
             </div>
-            ${heightPx >= 44 ? `
+            ${!isCompact ? `
               <div class="block-bottom-row">
                 <span class="block-notes">${escapeHTML(b.notes || '')}</span>
                 <span class="cat-badge">${escapeHTML(cat.name)}</span>
               </div>
             ` : ''}
-            <div class="resize-handle" data-resize-id="${b.id}" title="Ziehen zum Verlängern / Verkürzen"></div>
+            <div class="resize-handle resize-handle-bottom" data-resize-dir="bottom" title="Nach unten ziehen zum Verlängern/Verkürzen"></div>
           </div>
         `;
       });
 
       canvas.innerHTML = html;
-      attachTimelineInteractions(canvas, START_HOUR, END_HOUR, PX_PER_MIN);
-    }
 
-    function attachTimelineInteractions(canvas, startHour, endHour, pxPerMin) {
-      // Double-click empty timeline slot to open modal at that exact 15-min time
-      canvas.ondblclick = function (e) {
+      // Double-click on empty timeline space to create a block at that hour
+      canvas.ondblclick = (e) => {
         if (e.target.closest('.time-block')) return;
         const rect = canvas.getBoundingClientRect();
         const offsetY = Math.max(0, e.clientY - rect.top);
-        const rawMin = startHour * 60 + offsetY / pxPerMin;
-        const snappedMin = Math.max(startHour * 60, Math.min((endHour - 1) * 60, Math.round(rawMin / 15) * 15));
+        const rawMin = START_HOUR * 60 + offsetY / PX_PER_MIN;
+        const snappedMin = Math.max(0, Math.min(23 * 60 + 45, Math.round(rawMin / 15) * 15));
         openBlockModal(minutesToTime(snappedMin), 'form');
       };
 
-      const blocks = canvas.querySelectorAll('.time-block');
-      blocks.forEach(el => {
-        const blockId = el.getAttribute('data-block-id');
-
+      // Interactive Drag-to-Move & Top/Bottom Resize-to-Extend Handlers
+      canvas.querySelectorAll('.time-block').forEach(el => {
         el.addEventListener('pointerdown', (e) => {
-          if (e.target.closest('.check-box') || e.target.closest('button')) return;
+          if (e.target.closest('button') || e.target.closest('.check-box')) return;
+          if (e.button !== undefined && e.button !== 0) return;
 
-          const dayData = ensureDay(state.selectedDate);
-          const block = dayData.blocks.find(b => b.id === blockId);
+          const blockId = el.getAttribute('data-block-id');
+          const block = dayData.blocks.find(x => x.id === blockId);
           if (!block) return;
 
-          const isResize = Boolean(e.target.closest('.resize-handle'));
-          const startY = e.clientY;
+          const resizeHandle = e.target.closest('.resize-handle');
+          const resizeDir = resizeHandle ? resizeHandle.getAttribute('data-resize-dir') : null;
+          const isResizing = Boolean(resizeDir);
+
+          const startClientY = e.clientY;
           const origStartMin = timeToMinutes(block.start);
           const origDurMin = Math.max(15, Number(block.duration) || 60);
+          const origEndMin = origStartMin + origDurMin;
+
+          let hasMoved = false;
           let currentStartMin = origStartMin;
           let currentDurMin = origDurMin;
-          let hasDragged = false;
-
           const timePill = el.querySelector('.block-time-pill');
+
           el.setPointerCapture(e.pointerId);
 
           const onPointerMove = (moveEvt) => {
-            const deltaY = moveEvt.clientY - startY;
-            if (!hasDragged && Math.abs(deltaY) < 5) return;
+            const deltaY = moveEvt.clientY - startClientY;
+            if (!hasMoved && Math.abs(deltaY) < 5) return;
 
-            if (!hasDragged) {
-              hasDragged = true;
+            if (!hasMoved) {
+              hasMoved = true;
               el.classList.add('is-interacting');
             }
 
-            const deltaMinRaw = deltaY / pxPerMin;
+            const deltaMinRaw = deltaY / PX_PER_MIN;
             const deltaMinSnapped = Math.round(deltaMinRaw / 15) * 15;
 
-            if (isResize) {
-              const maxDur = endHour * 60 - origStartMin;
+            if (isResizing && resizeDir === 'bottom') {
+              const maxDur = 24 * 60 - origStartMin;
               currentDurMin = Math.max(15, Math.min(maxDur, origDurMin + deltaMinSnapped));
-              const newHeight = Math.max(24, currentDurMin * pxPerMin - 2);
-              el.style.height = `${newHeight}px`;
+              el.style.height = `${Math.max(24, currentDurMin * PX_PER_MIN - 2)}px`;
+            } else if (isResizing && resizeDir === 'top') {
+              const newStart = Math.max(0, Math.min(origEndMin - 15, origStartMin + deltaMinSnapped));
+              currentStartMin = newStart;
+              currentDurMin = origEndMin - newStart;
+              el.style.top = `${currentStartMin * PX_PER_MIN}px`;
+              el.style.height = `${Math.max(24, currentDurMin * PX_PER_MIN - 2)}px`;
             } else {
-              const maxStart = endHour * 60 - origDurMin;
-              currentStartMin = Math.max(startHour * 60, Math.min(maxStart, origStartMin + deltaMinSnapped));
-              const newTop = (currentStartMin - startHour * 60) * pxPerMin;
-              el.style.top = `${newTop}px`;
+              const maxStart = Math.max(0, 24 * 60 - origDurMin);
+              currentStartMin = Math.max(0, Math.min(maxStart, origStartMin + deltaMinSnapped));
+              el.style.top = `${currentStartMin * PX_PER_MIN}px`;
             }
 
             if (timePill) {
-              const dispStart = minutesToTime(currentStartMin);
-              const dispEnd = getEndTime(dispStart, currentDurMin);
-              timePill.textContent = `${dispStart} – ${dispEnd}`;
+              const liveStartStr = minutesToTime(currentStartMin);
+              const liveEndStr = getEndTime(liveStartStr, currentDurMin);
+              timePill.textContent = `${liveStartStr} – ${liveEndStr}`;
             }
           };
 
-          const onPointerUp = (upEvt) => {
+          const onPointerUp = () => {
             el.removeEventListener('pointermove', onPointerMove);
             el.removeEventListener('pointerup', onPointerUp);
             el.removeEventListener('pointercancel', onPointerUp);
             el.classList.remove('is-interacting');
 
-            if (hasDragged) {
-              block.start = minutesToTime(currentStartMin);
+            if (!hasMoved) {
+              editBlock(blockId);
+              return;
+            }
+
+            const newStartStr = minutesToTime(currentStartMin);
+            if (newStartStr !== block.start || currentDurMin !== origDurMin) {
+              pushUndoSnapshot(isResizing ? `Dauer von „${block.title}“ geändert` : `„${block.title}“ verschoben`);
+              block.start = newStartStr;
               block.duration = currentDurMin;
               saveState();
               renderAll();
-              showToast(
-                isResize
-                  ? `Dauer angepasst: ${block.start} – ${getEndTime(block.start, block.duration)} (${block.duration} Min.)`
-                  : `Verschoben auf ${block.start} – ${getEndTime(block.start, block.duration)}`,
-                'success'
-              );
-            } else if (!isResize) {
-              editBlock(blockId);
+              showToast(`${block.title}: ${newStartStr} – ${getEndTime(newStartStr, currentDurMin)}`, 'success', true);
+            } else {
+              renderTimeline();
             }
           };
 
@@ -2516,14 +2849,182 @@
       });
     }
 
+    function insertTemplateAtTime(tplId, customStart = null) {
+      const tpl = state.templates.find(t => t.id === tplId);
+      if (!tpl) return;
+      const startStr = customStart || tpl.start;
+      pushUndoSnapshot(`Baustein „${tpl.title}“ eingefügt`);
+      const dayData = ensureDay(state.selectedDate);
+      dayData.blocks.push({
+        id: 'blk-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+        title: tpl.title,
+        start: startStr,
+        duration: tpl.duration,
+        categoryId: tpl.categoryId,
+        priority: tpl.priority || 'normal',
+        notes: tpl.notes || '',
+        completed: false
+      });
+      saveState();
+      renderAll();
+      showToast(`„${tpl.title}“ um ${startStr} Uhr eingeplant`, 'success', true);
+    }
+
+    function attachTemplateDragAndDrop(container) {
+      const chips = container.querySelectorAll('.template-drag-chip');
+      chips.forEach(chip => {
+        chip.addEventListener('pointerdown', (e) => {
+          if (e.button !== undefined && e.button !== 0) return;
+          const tplId = chip.getAttribute('data-tpl-id');
+          const tpl = state.templates.find(t => t.id === tplId);
+          if (!tpl) return;
+
+          const startX = e.clientX;
+          const startY = e.clientY;
+          let hasDragged = false;
+          let floatingBadge = null;
+          let dropGhost = null;
+          let snappedStartStr = null;
+
+          const scrollWrap = document.querySelector('.timeline-scroll-wrap');
+          const canvas = document.getElementById('timeline-canvas');
+          const cat = getCategory(tpl.categoryId);
+          const PX_PER_MIN = 38 / 60;
+
+          chip.setPointerCapture(e.pointerId);
+
+          const cleanup = () => {
+            chip.removeEventListener('pointermove', onMove);
+            chip.removeEventListener('pointerup', onUp);
+            chip.removeEventListener('pointercancel', onUp);
+            if (floatingBadge) floatingBadge.remove();
+            if (dropGhost) dropGhost.remove();
+            if (scrollWrap) scrollWrap.classList.remove('drop-target-active');
+          };
+
+          const onMove = (moveEvt) => {
+            const dx = moveEvt.clientX - startX;
+            const dy = moveEvt.clientY - startY;
+            if (!hasDragged && Math.hypot(dx, dy) < 6) return;
+
+            if (!hasDragged) {
+              hasDragged = true;
+              floatingBadge = document.createElement('div');
+              floatingBadge.style.cssText = `
+                position: fixed;
+                z-index: 9999;
+                pointer-events: none;
+                padding: 7px 12px;
+                border-radius: 10px;
+                font-size: 0.76rem;
+                font-weight: 800;
+                color: #fff;
+                background: rgba(15, 23, 42, 0.94);
+                border: 1.5px solid ${cat.color};
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
+                display: flex;
+                align-items: center;
+                gap: 7px;
+                transform: translate(-50%, -120%);
+              `;
+              floatingBadge.innerHTML = `<span style="width:8px; height:8px; border-radius:99px; background:${cat.color};"></span><span>${escapeHTML(tpl.title)} (${tpl.duration}m)</span>`;
+              document.body.appendChild(floatingBadge);
+            }
+
+            if (floatingBadge) {
+              floatingBadge.style.left = `${moveEvt.clientX}px`;
+              floatingBadge.style.top = `${moveEvt.clientY}px`;
+            }
+
+            if (scrollWrap && canvas) {
+              const wrapRect = scrollWrap.getBoundingClientRect();
+              const isOverTimeline =
+                moveEvt.clientX >= wrapRect.left &&
+                moveEvt.clientX <= wrapRect.right &&
+                moveEvt.clientY >= wrapRect.top &&
+                moveEvt.clientY <= wrapRect.bottom;
+
+              if (isOverTimeline) {
+                scrollWrap.classList.add('drop-target-active');
+                const canvasRect = canvas.getBoundingClientRect();
+                const offsetY = Math.max(0, moveEvt.clientY - canvasRect.top);
+                const rawMin = offsetY / PX_PER_MIN;
+                const durMin = Math.max(15, Number(tpl.duration) || 60);
+                const maxStart = Math.max(0, 24 * 60 - durMin);
+                const snappedMin = Math.max(0, Math.min(maxStart, Math.round(rawMin / 15) * 15));
+                snappedStartStr = minutesToTime(snappedMin);
+
+                if (!dropGhost) {
+                  dropGhost = document.createElement('div');
+                  dropGhost.className = 'tpl-drop-ghost';
+                  canvas.appendChild(dropGhost);
+                }
+                dropGhost.style.top = `${snappedMin * PX_PER_MIN}px`;
+                dropGhost.style.height = `${Math.max(24, durMin * PX_PER_MIN - 2)}px`;
+                dropGhost.style.borderColor = cat.color;
+                dropGhost.style.background = hexToRgba(cat.color, 0.24);
+                dropGhost.innerHTML = `<span>+ ${escapeHTML(tpl.title)}</span><span>${snappedStartStr} – ${getEndTime(snappedStartStr, durMin)}</span>`;
+              } else {
+                scrollWrap.classList.remove('drop-target-active');
+                snappedStartStr = null;
+                if (dropGhost) {
+                  dropGhost.remove();
+                  dropGhost = null;
+                }
+              }
+            }
+          };
+
+          const onUp = () => {
+            cleanup();
+            if (hasDragged) {
+              if (snappedStartStr) {
+                insertTemplateAtTime(tplId, snappedStartStr);
+              }
+            } else {
+              insertTemplateAtTime(tplId);
+            }
+          };
+
+          chip.addEventListener('pointermove', onMove);
+          chip.addEventListener('pointerup', onUp);
+          chip.addEventListener('pointercancel', onUp);
+        });
+      });
+    }
+
     function renderEditor() {
-      // Populate Category Select
       const catSelect = document.getElementById('block-category');
       if (catSelect) {
-        const prevVal = catSelect.value;
-        catSelect.innerHTML = state.categories.map(c => `<option value="${c.id}">${escapeHTML(c.name)}</option>`).join('');
-        if (prevVal && state.categories.some(c => c.id === prevVal)) {
-          catSelect.value = prevVal;
+        const currentVal = catSelect.value;
+        catSelect.innerHTML = state.categories.map(c =>
+          `<option value="${c.id}">${escapeHTML(c.name)}</option>`
+        ).join('');
+        if (currentVal && state.categories.some(c => c.id === currentVal)) {
+          catSelect.value = currentVal;
+        }
+      }
+
+      // Render Sample Day Preview List inside Tab 2
+      const sampleList = document.getElementById('sample-day-editor-list');
+      if (sampleList) {
+        const sBlocks = (state.sampleDay && Array.isArray(state.sampleDay.blocks)) ? state.sampleDay.blocks : [];
+        if (!sBlocks.length) {
+          sampleList.innerHTML = `<p style="font-size:0.74rem; color:var(--text-dim);">Keine Blöcke im Beispieltag gespeichert.</p>`;
+        } else {
+          sampleList.innerHTML = sBlocks.map((sb, idx) => {
+            const cat = getCategory(sb.categoryId);
+            return `
+              <div class="category-chip-row" style="padding:6px 10px;">
+                <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+                  <span style="width:9px; height:9px; border-radius:99px; background:${cat.color}; flex-shrink:0;"></span>
+                  <span style="font-size:0.76rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${sb.start} · ${escapeHTML(sb.title)}</span>
+                  <span style="font-size:0.68rem; color:var(--text-muted); flex-shrink:0;">(${sb.duration}m)</span>
+                </div>
+                <button type="button" class="mini-btn" onclick="removeBlockFromSample(${idx})" title="Aus Beispieltag entfernen">✕</button>
+              </div>
+            `;
+          }).join('');
         }
       }
 
@@ -2646,6 +3147,7 @@
 
     // Expose functions globally for inline HTML handlers
     Object.assign(window, {
+      undoLastAction,
       changeDate,
       selectSpecificDate,
       goToToday,
@@ -2655,6 +3157,9 @@
       toggleGoal,
       deleteGoal,
       loadSampleDay,
+      saveCurrentDayAsSample,
+      removeBlockFromSample,
+      resetSampleDayToDefault,
       openBlockModal,
       closeBlockModal,
       deleteEditingBlockFromModal,
