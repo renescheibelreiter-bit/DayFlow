@@ -490,13 +490,13 @@
       background: rgba(7, 11, 22, 0.85);
       border: 1px solid var(--border-subtle);
       overflow-y: auto;
-      max-height: 760px;
+      max-height: 820px;
     }
 
     .timeline-canvas {
       position: relative;
       width: 100%;
-      min-height: 1088px;
+      min-height: 912px;
     }
 
     .hour-row {
@@ -544,8 +544,8 @@
       position: absolute;
       left: 66px;
       right: 12px;
-      border-radius: 13px;
-      padding: 8px 12px 12px;
+      border-radius: 10px;
+      padding: 4px 10px 8px;
       border: 1px solid rgba(255, 255, 255, 0.18);
       backdrop-filter: blur(10px);
       cursor: grab;
@@ -553,7 +553,7 @@
       user-select: none;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
       overflow: hidden;
       transition: box-shadow 0.18s ease, filter 0.18s ease;
       z-index: 10;
@@ -1092,7 +1092,7 @@
           <div>
             <h2 class="panel-title">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              Tages-Zeitleiste (06:00 – 23:00 Uhr)
+              Tages-Zeitleiste (00:00 – 24:00 Uhr)
             </h2>
             <p class="panel-subtitle">Klicke auf einen Block zum Bearbeiten, ziehe ihn zum Verschieben oder ziehe am unteren Rand zum Verlängern (Doppelklick auf freie Zeit = neuer Termin)</p>
           </div>
@@ -1893,7 +1893,8 @@
       const dayData = ensureDay(state.selectedDate);
       const block = dayData.blocks.find(b => b.id === blockId);
       if (!block) return;
-      const newMin = Math.max(6 * 60, Math.min(22 * 60 + 30, timeToMinutes(block.start) + deltaMinutes));
+      const maxStart = Math.max(0, 24 * 60 - (Number(block.duration) || 60));
+      const newMin = Math.max(0, Math.min(maxStart, timeToMinutes(block.start) + deltaMinutes));
       block.start = minutesToTime(newMin);
       saveState();
       renderAll();
@@ -2344,13 +2345,14 @@
       const canvas = document.getElementById('timeline-canvas');
       if (!canvas) return;
 
-      const START_HOUR = 6;
-      const END_HOUR = 23;
-      const PX_PER_HOUR = 64;
+      const START_HOUR = 0;
+      const END_HOUR = 24;
+      const PX_PER_HOUR = 38;
       const PX_PER_MIN = PX_PER_HOUR / 60;
       const totalHeight = (END_HOUR - START_HOUR) * PX_PER_HOUR;
 
       canvas.style.height = `${totalHeight}px`;
+      canvas.style.minHeight = `${totalHeight}px`;
 
       let html = '';
       for (let h = START_HOUR; h <= END_HOUR; h++) {
@@ -2384,7 +2386,7 @@
         const startMin = Math.max(START_HOUR * 60, timeToMinutes(b.start));
         const durMin = Math.max(15, Number(b.duration) || 60);
         const topPx = (startMin - START_HOUR * 60) * PX_PER_MIN;
-        const heightPx = Math.max(36, durMin * PX_PER_MIN - 2);
+        const heightPx = Math.max(24, durMin * PX_PER_MIN - 2);
         const endTimeStr = getEndTime(b.start, durMin);
 
         const bgGradient = `linear-gradient(135deg, ${hexToRgba(cat.color, 0.34)}, ${hexToRgba(cat.color, 0.16)})`;
@@ -2406,7 +2408,7 @@
                 <button type="button" class="block-mini-btn" onclick="event.stopPropagation(); deleteBlock('${b.id}')" title="Löschen">✕</button>
               </div>
             </div>
-            ${heightPx >= 52 ? `
+            ${heightPx >= 44 ? `
               <div class="block-bottom-row">
                 <span class="block-notes">${escapeHTML(b.notes || '')}</span>
                 <span class="cat-badge">${escapeHTML(cat.name)}</span>
@@ -2469,7 +2471,7 @@
             if (isResize) {
               const maxDur = endHour * 60 - origStartMin;
               currentDurMin = Math.max(15, Math.min(maxDur, origDurMin + deltaMinSnapped));
-              const newHeight = Math.max(36, currentDurMin * pxPerMin - 2);
+              const newHeight = Math.max(24, currentDurMin * pxPerMin - 2);
               el.style.height = `${newHeight}px`;
             } else {
               const maxStart = endHour * 60 - origDurMin;
